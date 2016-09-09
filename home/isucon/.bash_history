@@ -246,3 +246,28 @@ cd sites-available/
 ls
 cd de
 vi default 
+/home/isucon/bench.sh 40.74.89.242
+cd home
+cd /home
+cd /isucon
+cd isucon
+ls
+ls
+cd /home
+ls
+cd /isucon]
+cd /isucon
+cd /home/isucon
+ls
+cd ..
+cd yuruisucon5
+ls
+ls
+cd ..
+cd yuruisucon6
+cd ls
+ls
+cd ..
+cd yurumem
+ls
+exit
