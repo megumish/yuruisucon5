@@ -364,10 +364,10 @@ def post_comment(entry_id):
 @app.get("/footprints")
 def get_footprints():
     authenticated()
-    query = "SELECT user_id, owner_id, DATE(created_at) AS date, MAX(created_at) AS updated " \
+    query = "SELECT user_id, owner_id, MAX(created_at) AS updated " \
             "FROM footprints " \
             "WHERE user_id = %s " \
-            "GROUP BY user_id, owner_id, DATE(created_at) " \
+            "GROUP BY user_id, owner_id " \
             "ORDER BY updated DESC " \
             "LIMIT 50"
     footprints = db_fetchall(query, current_user()["id"])
