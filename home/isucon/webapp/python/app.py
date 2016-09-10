@@ -203,15 +203,7 @@ def get_index():
     
     comments_of_friends = db_fetchall("SELECT *, comments.created_at AS time FROM comments JOIN relations ON comments.user_id=relations.one JOIN entries ON comments.user_id=entries.user_id WHERE relations.another=" + str(current_user()["id"]) + " AND (private=0 OR comments.user_id=" + str(current_user()["id"]) + ") ORDER BY time DESC LIMIT 10")
     
-    friends_map = {}
-    with db().cursor() as cursor:
-        cursor.execute("SELECT * FROM relations WHERE one = %s OR another = %s ORDER BY created_at DESC",
-                       args=(current_user()["id"], current_user()["id"]))
-        for relation in cursor:
-            key = "another" if relation["one"] == current_user()["id"] else "one"
-            friends_map.setdefault(relation[key], relation["created_at"])
-    friends = list(friends_map.items())
-    
+    friends = db_fetchone("SELECT DISTINCT COUNT(1) AS cnt FROM relations WHERE one=%s", current_user()["id"]) 
     query = "SELECT user_id, owner_id, MAX(created_at) AS updated " \
             "FROM footprints " \
             "WHERE user_id = %s " \
