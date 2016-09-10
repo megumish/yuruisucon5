@@ -142,8 +142,8 @@ def is_friend(another_id):
     user_id = get_session_user_id()
     if not user_id:
         return False
-    query = "SELECT COUNT(1) AS cnt FROM relations WHERE (one = %s AND another = %s) OR (one = %s AND another = %s)"
-    result = db_fetchone(query, user_id, another_id, another_id, user_id)
+    query = "SELECT COUNT(1) AS cnt FROM relations WHERE (one,another) IN ((%s,%s))"
+    result = db_fetchone(query, user_id, another_id)
     return result and result["cnt"] > 0
 
 
