@@ -201,11 +201,10 @@ def get_index():
     
     entries_of_friends = []
     with db().cursor() as cursor:
-        cursor.execute("SELECT * FROM entries ORDER BY created_at DESC LIMIT 1000")
+        cursor.execute("SELECT title,created_at, id, user_id FROM entries ORDER BY created_at DESC LIMIT 1000")
         for entry in cursor:
             if not is_friend(entry["user_id"]):
                 continue
-            entry["title"] = entry["body"].split("\n")[0]
             entries_of_friends.append(entry)
             if len(entries_of_friends) >= 10:
                 break
@@ -233,7 +232,7 @@ def get_index():
             friends_map.setdefault(relation[key], relation["created_at"])
     friends = list(friends_map.items())
     
-    query = "SELECT user_id, owner_id, DATE(created_at) AS date, MAX(created_at) AS updated " \
+    query = "SELECT user_id, owner_id, MAX(created_at) AS updated " \
             "FROM footprints " \
             "WHERE user_id = %s " \
             "GROUP BY user_id, owner_id, DATE(created_at) " \
