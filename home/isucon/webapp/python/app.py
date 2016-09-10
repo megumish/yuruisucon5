@@ -199,15 +199,7 @@ def get_index():
                             "WHERE e.user_id = %s ORDER BY c.created_at DESC LIMIT 10"
     comments_for_me = db_fetchall(comments_for_me_query, current_user()["id"])
     
-    entries_of_friends = []
-    with db().cursor() as cursor:
-        cursor.execute("SELECT title,created_at, id, user_id FROM entries ORDER BY created_at DESC LIMIT 1000")
-        for entry in cursor:
-            if not is_friend(entry["user_id"]):
-                continue
-            entries_of_friends.append(entry)
-            if len(entries_of_friends) >= 10:
-                break
+    entries_of_friends = db_fetchall("SELECT * FROM entries JOIN relations ON entries.user_id=relations.one WHERE relations.another=" + str(current_user()["id"]) + " ORDER BY entries.created_at DESC LIMIT 10")
     
     comments_of_friends = []
     with db().cursor() as cursor:
