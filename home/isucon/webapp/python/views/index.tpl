@@ -61,10 +61,10 @@
     % for entry in entries_of_friends:
     <div class="friend-entry">
       <ul class="list-group">
-        % entry_owner = get_user(entry["user_id"])
+        % entry_owner = get_user(entry["e_user_id"])
         <li class="list-group-item entry-owner"><a href="/diary/entries/{{entry_owner["account_name"]}}">{{entry_owner["nick_name"]}}さん</a>:
-        <li class="list-group-item entry-title"><a href="/diary/entry/{{entry["id"]}}">{{entry["title"]}}</a>
-        <li class="list-group-item entry-created-at">投稿時刻:{{entry["created_at"]}}
+        <li class="list-group-item entry-title"><a href="/diary/entry/{{entry["e_id"]}}">{{entry["e_title"]}}</a>
+        <li class="list-group-item entry-created-at">投稿時刻:{{entry["time"]}}
       </ul>
     </div>
     % end
@@ -84,7 +84,7 @@
           <a href="/profile/{{comment_owner["account_name"]}}">{{comment_owner["nick_name"]}}さん</a>から
           <a href="/profile/{{entry_owner["account_name"]}}">{{entry_owner["nick_name"]}}さん</a>へのコメント:
         <li class="list-group-item comment-comment">{{comment["comment"][:27] + '...' if len(comment["comment"]) > 30 else comment["comment"]}}
-        <li class="list-group-item comment-created-at">投稿時刻:{{comment["created_at"]}}
+        <li class="list-group-item comment-created-at">投稿時刻:{{comment["time"]}}
       </ul>
     </div>
     % end

@@ -199,21 +199,9 @@ def get_index():
                             "WHERE e.user_id = %s ORDER BY c.created_at DESC LIMIT 10"
     comments_for_me = db_fetchall(comments_for_me_query, current_user()["id"])
     
-    entries_of_friends = db_fetchall("SELECT * FROM entries JOIN relations ON entries.user_id=relations.one WHERE relations.another=" + str(current_user()["id"]) + " ORDER BY entries.created_at DESC LIMIT 10")
+    entries_of_friends = db_fetchall("SELECT entries.title AS e_title, entries.id AS e_id ,entries.user_id AS e_user_id ,entries.created_at AS time FROM entries JOIN relations ON entries.user_id=relations.one WHERE relations.another=" + str(current_user()["id"]) + " ORDER BY time DESC LIMIT 10")
     
-    comments_of_friends = []
-    with db().cursor() as cursor:
-        cursor.execute("SELECT * FROM comments ORDER BY created_at DESC LIMIT 1000")
-        for comment in cursor:
-            if not is_friend(comment["user_id"]):
-                continue
-            entry = db_fetchone("SELECT * FROM entries WHERE id = %s", comment["entry_id"])
-            entry["is_private"] = (entry["private"] == 1)
-            if entry["is_private"] and not permitted(entry["user_id"]):
-                continue
-            comments_of_friends.append(comment)
-            if len(comments_of_friends) >= 10:
-                break
+    comments_of_friends = db_fetchall("SELECT *, comments.created_at AS time FROM comments JOIN relations ON comments.user_id=relations.one JOIN entries ON comments.user_id=entries.user_id WHERE relations.another=" + str(current_user()["id"]) + " AND (private=0 OR comments.user_id=" + str(current_user()["id"]) + ") ORDER BY time DESC LIMIT 10")
     
     friends_map = {}
     with db().cursor() as cursor:
