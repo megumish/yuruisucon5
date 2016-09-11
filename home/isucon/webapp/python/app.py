@@ -4,6 +4,7 @@ import os
 import bottle
 import pymysql
 
+bottle.debug(False)
 
 app = bottle.default_app()
 app.config.load_dict({
@@ -204,10 +205,9 @@ def get_index():
     comments_of_friends = db_fetchall("SELECT *, comments.created_at AS time FROM comments JOIN relations ON comments.user_id=relations.one JOIN entries ON comments.user_id=entries.user_id WHERE relations.another=" + str(current_user()["id"]) + " AND (private=0 OR comments.user_id=" + str(current_user()["id"]) + ") ORDER BY time DESC LIMIT 10")
     
     friends = db_fetchone("SELECT DISTINCT COUNT(1) AS cnt FROM relations WHERE one=%s", current_user()["id"]) 
-    query = "SELECT user_id, owner_id, MAX(created_at) AS updated " \
+    query = "SELECT user_id, owner_id, created_at AS updated " \
             "FROM footprints " \
             "WHERE user_id = %s " \
-            "GROUP BY user_id, owner_id, DATE(created_at) " \
             "ORDER BY updated DESC " \
             "LIMIT 10"
     footprints = db_fetchall(query, current_user()["id"])
@@ -335,10 +335,9 @@ def post_comment(entry_id):
 @app.get("/footprints")
 def get_footprints():
     authenticated()
-    query = "SELECT user_id, owner_id, MAX(created_at) AS updated " \
+    query = "SELECT user_id, owner_id, created_at AS updated " \
             "FROM footprints " \
             "WHERE user_id = %s " \
-            "GROUP BY user_id, owner_id " \
             "ORDER BY updated DESC " \
             "LIMIT 50"
     footprints = db_fetchall(query, current_user()["id"])
