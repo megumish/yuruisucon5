@@ -3,4 +3,4 @@
 /.*
 
 !/.gitignore
-!/home/isucon/python/*
+!/home/isucon/webapp/python/*
