@@ -3,6 +3,4 @@
 /.*
 
 !/.gitignore
-!/etc/nginx/*
-!/etc/nginx/.*
-!/home/isucon/*
+!/home/isucon/python/*
